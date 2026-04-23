@@ -144,6 +144,8 @@ h2 {
 .readiness-row strong {
   color: var(--ink);
   text-align: right;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .setup .primary {
@@ -154,6 +156,10 @@ h2 {
 .source-list {
   display: grid;
   gap: 8px;
+}
+
+.source-list[hidden] {
+  display: none;
 }
 
 .source-card {
@@ -176,6 +182,7 @@ h2 {
 
 .source-card span {
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .next-action {
