@@ -25,7 +25,7 @@ Trust boundary:
 Important modules:
 
 - `src/main/capture-service.ts`: lists selectable windows and captures selected-window screenshots.
-- `src/main/openai-vision-client.ts`: sends image data to the configured OpenAI vision model.
+- `src/main/openai-vision-client.ts`: sends image data either through `OPENAI_API_KEY` or through `codex exec --image` using local Codex auth.
 - `src/core/scene-validator.ts`: rejects stale, low-confidence, or missing critical visible fields.
 - `src/core/policy-engine.ts`: chooses the next allowed Paperclips action deterministically.
 - `src/core/evidence-validator.ts`: blocks advice that cites unsupported or stale evidence.
@@ -36,6 +36,6 @@ Run:
 ```bash
 npm install
 cp .env.example .env
-# fill OPENAI_API_KEY
+# optional: fill OPENAI_API_KEY. If empty, the app uses local Codex auth via codex exec.
 npm run dev
 ```

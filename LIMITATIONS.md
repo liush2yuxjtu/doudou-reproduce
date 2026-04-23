@@ -4,6 +4,7 @@
 - It supports Universal Paperclips early economy only.
 - It does not read DOM, JavaScript variables, local storage, browser devtools state, or Paperclips internals for gameplay values.
 - It uploads selected-window screenshots to the configured vision provider when live scene parsing runs.
+- It can use `OPENAI_API_KEY` or local Codex auth through `codex exec --image`. The app never prints credential values.
 - It does not capture the full desktop by default.
 - It does not automate game input.
 - It does not support ranked or anti-cheat-sensitive games.

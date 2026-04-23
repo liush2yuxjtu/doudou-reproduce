@@ -138,7 +138,7 @@ async function proactive(): Promise<void> {
 
 function renderReadiness(ready: Readiness): void {
   windowStatus.textContent = ready.selectedSource?.name ?? 'not selected';
-  modelStatus.textContent = ready.modelConfigured ? 'ready' : 'missing OPENAI_API_KEY';
+  modelStatus.textContent = ready.modelConfigured ? 'ready' : 'missing OpenAI/Codex auth';
   askLatest.disabled = !ready.latestScene;
   setIdle(ready.selectedSource ? 'Ready' : 'Setup');
 }

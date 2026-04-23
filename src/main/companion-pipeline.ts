@@ -124,7 +124,7 @@ export class CompanionPipeline {
 
 export class MockVisionClient extends OpenAiVisionClient {
   constructor(private readonly scene: RawPaperclipsScene) {
-    super('mock-key', 'mock-model');
+    super('mock-model');
   }
 
   override isConfigured(): boolean {
