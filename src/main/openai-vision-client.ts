@@ -11,6 +11,11 @@ const DEFAULT_MODEL = 'gpt-5.3-codex-spark';
 const RESPONSES_URL = 'https://api.openai.com/v1/responses';
 const execFileAsync = promisify(execFile);
 
+interface CodexExecResult {
+  stdout?: string | Buffer;
+  stderr?: string | Buffer;
+}
+
 export class OpenAiVisionClient {
   private readonly credentials = resolveOpenAiCredentials();
 
@@ -78,7 +83,7 @@ export class OpenAiVisionClient {
 
     try {
       await writeFile(imagePath, Buffer.from(frame.base64, 'base64'));
-      await execFileAsync(
+      const result = await execFileAsync(
         'codex',
         [
           'exec',
@@ -101,9 +106,9 @@ export class OpenAiVisionClient {
           timeout: 60_000,
           maxBuffer: 1024 * 1024
         }
-      );
+      ) as CodexExecResult;
 
-      const output = await readFile(outputPath, 'utf8');
+      const output = await readCodexCliLastMessage(outputPath, result);
       return parsePaperclipsSceneJson(output, {
         captureId: frame.captureId,
         capturedAt: frame.capturedAt
@@ -112,6 +117,24 @@ export class OpenAiVisionClient {
       await rm(dir, { recursive: true, force: true });
     }
   }
+}
+
+export async function readCodexCliLastMessage(outputPath: string, result: CodexExecResult): Promise<string> {
+  let missingFileError: unknown;
+
+  try {
+    const output = await readFile(outputPath, 'utf8');
+    if (output.trim()) return output;
+  } catch (error) {
+    if (!isMissingFile(error)) throw error;
+    missingFileError = error;
+  }
+
+  const fallback = [toUtf8(result.stdout), toUtf8(result.stderr)].filter(Boolean).join('\n').trim();
+  if (fallback) return fallback;
+
+  if (missingFileError) throw missingFileError;
+  throw new Error('CodexCliEmptyOutput');
 }
 
 function paperclipsVisionPrompt(): string {
@@ -124,6 +147,18 @@ function paperclipsVisionPrompt(): string {
     'Top level JSON shape:',
     '{"isPaperclips": boolean, "confidence": number, "fields": {...}, "unknowns": string[], "notes": string[]}'
   ].join('\n');
+}
+
+function isMissingFile(error: unknown): boolean {
+  return typeof error === 'object'
+    && error !== null
+    && 'code' in error
+    && (error as NodeJS.ErrnoException).code === 'ENOENT';
+}
+
+function toUtf8(value: string | Buffer | undefined): string {
+  if (!value) return '';
+  return Buffer.isBuffer(value) ? value.toString('utf8') : value;
 }
 
 function codexVisionPrompt(): string {
