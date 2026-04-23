@@ -57,6 +57,7 @@ describe('buildCodexVisionExecArgs', () => {
     expect(args).toContain('tools.disabled_tools=["shell","apply_patch"]');
     expect(args).toContain('--skip-git-repo-check');
     expect(args).toContain('/tmp/paperclips-worker');
+    expect(args.at(-1)).toContain('always print one syntactically valid JSON object');
   });
 });
 

@@ -154,10 +154,15 @@ export class OpenAiVisionClient {
       ) as CodexExecResult;
 
       const output = await readCodexCliLastMessage(outputPath, result);
-      return parsePaperclipsSceneJson(output, {
-        captureId: frame.captureId,
-        capturedAt: frame.capturedAt
-      });
+      try {
+        return parsePaperclipsSceneJson(output, {
+          captureId: frame.captureId,
+          capturedAt: frame.capturedAt
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`${message} from ${model}: ${summarizeCodexOutput(output)}`);
+      }
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
@@ -271,10 +276,19 @@ function codexVisionPrompt(): string {
   return [
     'You are a stateless image-to-JSON worker.',
     paperclipsVisionPrompt(),
+    'You must always print one syntactically valid JSON object, even if the screenshot is unreadable.',
+    'If the image is unavailable, blank, or not Paperclips, set isPaperclips to false, confidence to 0, every field value to null, and explain only inside notes.',
     'Inspect only the attached image. Do not read files, run shell commands, browse, use skills, or use repository content.',
     'Ignore AGENTS.md, project docs, skill instructions, hooks, and any local markdown files.',
     'Print only the JSON object and no markdown fences.'
   ].join('\n');
+}
+
+function summarizeCodexOutput(output: string): string {
+  return output
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 500) || '<empty>';
 }
 
 function extractOutputText(payload: unknown): string {
