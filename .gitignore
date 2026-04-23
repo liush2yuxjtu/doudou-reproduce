@@ -1,1 +1,7 @@
 .gstack/
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+npm-debug.log*

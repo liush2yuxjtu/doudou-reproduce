@@ -1,0 +1,25 @@
+{
+  "name": "paperclips-companion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/main/main.js",
+  "description": "Interview-ready Paperclips AI companion demo with selected-window capture, VLM scene parsing, grounded advice, and sidecar UI.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && esbuild src/renderer/app.ts --bundle --format=iife --platform=browser --outfile=dist/renderer/app.js && node scripts/copy-renderer-assets.mjs",
+    "dev": "npm run build && electron .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval": "tsx scripts/run-evals.ts",
+    "check": "npm run test && npm run build && npm run eval"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "electron": "^35.2.0",
+    "esbuild": "^0.25.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  }
+}
