@@ -90,11 +90,11 @@ export function validatePaperclipsScene(
     ageMs
   };
 
-  return {
-    ok: issues.length === 0,
-    scene: issues.length === 0 ? scene : undefined,
-    issues
-  };
+  if (issues.length > 0) {
+    return { ok: false, issues };
+  }
+
+  return { ok: true, scene, issues };
 }
 
 function qualityFor(raw: RawPaperclipsScene, issues: string[]): SceneQuality {

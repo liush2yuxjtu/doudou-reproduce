@@ -51,3 +51,9 @@
 **Depends on:** Paperclips eval pass and demo script
 
 ## Completed
+
+### Implement First Electron Paperclips Companion Slice
+
+**What:** Added Electron + TypeScript scaffold, selected-window capture, OpenAI vision scene parser boundary, scene validation, deterministic Paperclips policy, evidence blocking, sidecar UI, TTS controls, eval runner, and interview docs.
+
+**Evidence:** `npm test`, `npm run build`, and `npm run eval` are the intended verification commands for this slice.

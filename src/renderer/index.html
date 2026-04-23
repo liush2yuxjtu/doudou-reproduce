@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paperclips Companion</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="status-bar">
+        <div>
+          <p class="eyebrow">Paperclips Companion</p>
+          <h1 id="status-title">Setup</h1>
+        </div>
+        <span id="freshness" class="pill">idle</span>
+      </header>
+
+      <section class="setup">
+        <div class="readiness-row">
+          <span>Window</span>
+          <strong id="window-status">not selected</strong>
+        </div>
+        <div class="readiness-row">
+          <span>Model key</span>
+          <strong id="model-status">checking</strong>
+        </div>
+        <button id="select-window" class="primary">Select Paperclips Window</button>
+      </section>
+
+      <section id="source-list" class="source-list" hidden></section>
+
+      <section class="next-action">
+        <p class="eyebrow">Next action</p>
+        <h2 id="advice-title">No scene yet</h2>
+        <p id="advice-body">Select the Paperclips browser window, then capture a frame.</p>
+      </section>
+
+      <section class="evidence">
+        <div class="section-head">
+          <h2>Evidence</h2>
+          <span id="confidence">confidence: --</span>
+        </div>
+        <div id="evidence-chips" class="chips"></div>
+      </section>
+
+      <section class="scene-fields">
+        <div class="section-head">
+          <h2>Scene fields</h2>
+          <span id="scene-age">--</span>
+        </div>
+        <dl id="scene-grid" class="scene-grid"></dl>
+      </section>
+
+      <section class="ask">
+        <label for="question">Ask</label>
+        <textarea id="question" rows="3">What should I do now?</textarea>
+        <div class="button-row">
+          <button id="capture-ask" class="primary">Capture & Ask</button>
+          <button id="ask-latest">Ask Latest</button>
+          <button id="proactive">Proactive</button>
+        </div>
+        <div class="button-row compact">
+          <button id="stop-speech">Stop</button>
+          <button id="replay-speech">Replay</button>
+          <label class="toggle"><input id="mute" type="checkbox" /> Muted</label>
+        </div>
+      </section>
+
+      <section class="transcript">
+        <div class="section-head">
+          <h2>Transcript</h2>
+        </div>
+        <div id="transcript"></div>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

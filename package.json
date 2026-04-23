@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "dist/main/main.js",
+  "main": "dist/src/main/main.js",
   "description": "Interview-ready Paperclips AI companion demo with selected-window capture, VLM scene parsing, grounded advice, and sidecar UI.",
   "scripts": {
     "build": "tsc -p tsconfig.json && esbuild src/renderer/app.ts --bundle --format=iife --platform=browser --outfile=dist/renderer/app.js && node scripts/copy-renderer-assets.mjs",

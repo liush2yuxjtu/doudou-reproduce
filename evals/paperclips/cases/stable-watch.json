@@ -1,0 +1,24 @@
+{
+  "name": "stable early economy with no urgent action",
+  "expectedAction": "watch",
+  "rawScene": {
+    "captureId": 3,
+    "capturedAt": "2026-04-23T12:00:00.000Z",
+    "isPaperclips": true,
+    "confidence": 0.9,
+    "fields": {
+      "clips": { "value": 121, "raw": "121 clips", "confidence": 0.95, "visible": true },
+      "funds": { "value": 18.2, "raw": "$18.20", "unit": "usd", "confidence": 0.95, "visible": true },
+      "unsoldInventory": { "value": 4, "raw": "Unsold Inventory: 4", "confidence": 0.95, "visible": true },
+      "pricePerClip": { "value": 0.25, "raw": "$0.25", "unit": "usd", "confidence": 0.94, "visible": true },
+      "publicDemand": { "value": 52, "raw": "Public Demand: 52%", "unit": "percent", "confidence": 0.95, "visible": true },
+      "wire": { "value": 480, "raw": "Wire: 480 inches", "unit": "inches", "confidence": 0.95, "visible": true },
+      "wireCost": { "value": 14, "raw": "$14", "unit": "usd", "confidence": 0.9, "visible": true },
+      "clipsPerSecond": { "value": 1, "raw": "1/sec", "confidence": 0.88, "visible": true },
+      "marketingLevel": { "value": 1, "raw": "Marketing: 1", "confidence": 0.85, "visible": true },
+      "autoClipperCost": { "value": 5, "raw": "$5", "unit": "usd", "confidence": 0.86, "visible": true }
+    },
+    "unknowns": [],
+    "notes": []
+  }
+}
