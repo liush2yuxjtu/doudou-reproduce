@@ -5,6 +5,8 @@ import type {
   TranscriptEntry
 } from '../shared/types.js';
 
+const MAX_SCENE_AGE_MS = 60_000;
+
 interface CompanionApi {
   listSources(): Promise<CaptureSourceSummary[]>;
   selectSource(sourceId: string): Promise<CaptureSourceSummary>;
@@ -147,7 +149,7 @@ function renderScene(scene: PaperclipsScene): void {
   confidence.textContent = `confidence: ${Math.round(scene.confidence * 100)}%`;
   sceneAge.textContent = `${Math.round(scene.ageMs / 1000)}s old`;
   freshness.textContent = scene.quality;
-  askLatest.disabled = scene.ageMs > 10_000;
+  askLatest.disabled = scene.ageMs > MAX_SCENE_AGE_MS;
 
   const rows = Object.entries(scene.fields).map(([key, field]) => {
     const value = field.value === null ? 'unknown' : `${field.value}${field.unit ? ` ${field.unit}` : ''}`;

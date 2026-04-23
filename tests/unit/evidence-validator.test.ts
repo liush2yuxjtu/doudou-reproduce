@@ -83,7 +83,7 @@ describe('approveAdvice', () => {
     });
 
     const result = approveAdvice(advice, scene, {
-      now: new Date('2026-04-23T12:00:20.000Z')
+      now: new Date('2026-04-23T12:01:20.000Z')
     });
 
     expect(result.ok).toBe(false);

@@ -1,12 +1,12 @@
 import type { AdviceApprovalResult, AdviceResponse, FieldPath, PaperclipsScene } from '../shared/types.js';
-import { getSceneField, isUsableField } from './scene-validator.js';
+import { DEFAULT_MAX_SCENE_AGE_MS, getSceneField, isUsableField } from './scene-validator.js';
 
 export interface AdviceApprovalOptions {
   now?: Date;
   maxAdviceAgeMs?: number;
 }
 
-const DEFAULT_MAX_ADVICE_AGE_MS = 10_000;
+const DEFAULT_MAX_ADVICE_AGE_MS = DEFAULT_MAX_SCENE_AGE_MS;
 
 export function approveAdvice(
   advice: AdviceResponse,

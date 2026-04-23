@@ -10,7 +10,7 @@ import type {
 
 const MIN_SCENE_CONFIDENCE = 0.55;
 const MIN_FIELD_CONFIDENCE = 0.5;
-const DEFAULT_MAX_AGE_MS = 10_000;
+export const DEFAULT_MAX_SCENE_AGE_MS = 60_000;
 
 const CRITICAL_FIELDS: PaperclipsFieldName[] = [
   'clips',
@@ -48,7 +48,7 @@ export function validatePaperclipsScene(
   options: SceneValidationOptions = {}
 ): SceneValidationResult {
   const now = options.now ?? new Date();
-  const maxAgeMs = options.maxAgeMs ?? DEFAULT_MAX_AGE_MS;
+  const maxAgeMs = options.maxAgeMs ?? DEFAULT_MAX_SCENE_AGE_MS;
   const issues: string[] = [];
   const capturedAtMs = Date.parse(raw.capturedAt);
 

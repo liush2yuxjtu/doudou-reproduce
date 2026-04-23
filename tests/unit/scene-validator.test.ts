@@ -37,7 +37,7 @@ describe('validatePaperclipsScene', () => {
 
   it('rejects stale scenes before they can ground advice', () => {
     const result = validatePaperclipsScene(baseScene(), {
-      now: new Date('2026-04-23T12:00:15.500Z')
+      now: new Date('2026-04-23T12:01:15.500Z')
     });
 
     expect(result.ok).toBe(false);
