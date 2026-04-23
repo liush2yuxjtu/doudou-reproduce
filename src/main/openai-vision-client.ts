@@ -1,8 +1,7 @@
-import { execFile } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { promisify } from 'node:util';
 import type { CaptureFrame, RawPaperclipsScene } from '../shared/types.js';
 import { parsePaperclipsSceneJson } from '../core/vlm-scene-parser.js';
 import { resolveOpenAiCredentials } from './codex-auth.js';
@@ -11,7 +10,8 @@ const DEFAULT_MODEL = 'gpt-5.3-codex-spark';
 const DEFAULT_CLI_VISION_FALLBACK_MODEL = 'gpt-5.4-mini';
 const DEFAULT_CLI_REASONING_EFFORT = 'medium';
 const RESPONSES_URL = 'https://api.openai.com/v1/responses';
-const execFileAsync = promisify(execFile);
+const CODEX_CLI_TIMEOUT_MS = 60_000;
+const CODEX_CLI_MAX_BUFFER = 1024 * 1024;
 const USEFUL_FIELD_KEYS = [
   'clips',
   'funds',
@@ -133,8 +133,7 @@ export class OpenAiVisionClient {
       await mkdir(cleanWorkDir, { recursive: true });
       await linkCodexAuth(codexHome);
       await writeFile(imagePath, Buffer.from(frame.base64, 'base64'));
-      const result = await execFileAsync(
-        'codex',
+      const result = await execCodexCli(
         buildCodexVisionExecArgs({
           model,
           imagePath,
@@ -143,15 +142,11 @@ export class OpenAiVisionClient {
           reasoningEffort: this.cliReasoningEffort
         }),
         {
-          env: {
-            ...process.env,
-            CODEX_HOME: codexHome,
-            HOME: cleanHome
-          },
-          timeout: 60_000,
-          maxBuffer: 1024 * 1024
+          ...process.env,
+          CODEX_HOME: codexHome,
+          HOME: cleanHome
         }
-      ) as CodexExecResult;
+      );
 
       const output = await readCodexCliLastMessage(outputPath, result);
       try {
@@ -167,6 +162,67 @@ export class OpenAiVisionClient {
       await rm(dir, { recursive: true, force: true });
     }
   }
+}
+
+function execCodexCli(args: string[], env: NodeJS.ProcessEnv): Promise<CodexExecResult> {
+  return new Promise((resolve, reject) => {
+    const child = spawn('codex', args, {
+      env,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    let stdout = '';
+    let stderr = '';
+    let timedOut = false;
+    let settled = false;
+
+    const finish = (error?: Error, result?: CodexExecResult): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result ?? { stdout, stderr });
+    };
+
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+    }, CODEX_CLI_TIMEOUT_MS);
+
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
+
+    child.stdout.on('data', (chunk: string) => {
+      stdout += chunk;
+      if (stdout.length + stderr.length > CODEX_CLI_MAX_BUFFER) {
+        child.kill('SIGTERM');
+        finish(new Error('CodexCliOutputTooLarge'));
+      }
+    });
+
+    child.stderr.on('data', (chunk: string) => {
+      stderr += chunk;
+      if (stdout.length + stderr.length > CODEX_CLI_MAX_BUFFER) {
+        child.kill('SIGTERM');
+        finish(new Error('CodexCliOutputTooLarge'));
+      }
+    });
+
+    child.on('error', (error) => finish(error));
+    child.on('close', (code, signal) => {
+      if (timedOut) {
+        finish(new Error('CodexCliTimeout'));
+        return;
+      }
+      if (code === 0) {
+        finish(undefined, { stdout, stderr });
+        return;
+      }
+      finish(new Error(`CodexCliFailed ${code ?? signal}: ${summarizeCodexOutput(stderr || stdout)}`));
+    });
+  });
 }
 
 export function buildCodexVisionExecArgs(options: CodexVisionExecArgsOptions): string[] {
