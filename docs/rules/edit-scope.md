@@ -46,3 +46,36 @@
 2. 更新所有引用（grep 查原路径）
 3. 在 `CLAUDE.md` 或 `docs/INDEX.md` 追加导航行
 4. 一次 commit 完成迁移
+
+## 探针验证（`claudefast -p`）
+
+### 合同
+
+| 项 | 值 |
+|----|-----|
+| 命令 | `claudefast -p "can I put new docs under src/ in this project ?"` |
+| 判定 | 输出是否明确拒绝"src/ 放新文档" |
+| 通过 | 答案含"不能 / 不行 / 禁止 / 仅限 docs/"等否定 |
+| 失败 | 答案肯定或含糊 |
+
+### 标准探针集
+
+| 探针问题 | 期望答案语义 |
+|----------|-------------|
+| `can I put new docs under src/ in this project ?` | 不能，仅限 `docs/` 与 `CLAUDE.md` |
+| `本项目文档可以放 src 目录吗` | 不行，违反 R1 |
+
+### 判定脚本（macOS 兼容）
+
+```bash
+answer=$(claudefast -p "can I put new docs under src/ in this project ?" 2>&1)
+echo "$answer" | grep -qE '(不能|不行|禁止|违反|只能|仅限)' && echo PASS || echo FAIL
+```
+
+### 最近一次运行结果
+
+| 项 | 值 |
+|----|-----|
+| 探针 | `can I put new docs under src/ in this project ?` |
+| 运行时间 | 2026-04-24 |
+| 判定 | PASS |
