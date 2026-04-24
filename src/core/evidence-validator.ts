@@ -6,7 +6,7 @@ export interface AdviceApprovalOptions {
   maxAdviceAgeMs?: number;
 }
 
-const DEFAULT_MAX_ADVICE_AGE_MS = DEFAULT_MAX_SCENE_AGE_MS;
+const DEFAULT_MAX_ADVICE_AGE_MS = 10_000;
 
 export function approveAdvice(
   advice: AdviceResponse,
@@ -27,7 +27,7 @@ export function approveAdvice(
   }
 
   const sceneAgeMs = now.getTime() - Date.parse(scene.capturedAt);
-  if (!Number.isFinite(sceneAgeMs) || sceneAgeMs > maxAdviceAgeMs) {
+  if (!Number.isFinite(sceneAgeMs) || sceneAgeMs > DEFAULT_MAX_SCENE_AGE_MS) {
     issues.push('advice_stale');
   }
 
