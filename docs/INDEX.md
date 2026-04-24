@@ -15,6 +15,7 @@
 | 路径 | 用途 |
 |------|------|
 | `docs/rules/` | 文档编辑与项目协作的硬规则 |
+| `docs/project/` | 项目基本事实（语言栈、架构、版本等）|
 
 ## 规则清单
 
@@ -24,6 +25,12 @@
 | [rules/line-budget.md](rules/line-budget.md) | 单文件 200 行硬上限 |
 | [rules/chinese-only.md](rules/chinese-only.md) | 中文写作强制规则 |
 | [rules/atomic-commits.md](rules/atomic-commits.md) | 文档编辑后的 commit 规范 |
+
+## 项目事实
+
+| 文件 | 主题 |
+|------|------|
+| [project/languages.md](project/languages.md) | 本项目使用的编程语言与工具链 |
 
 ## 新增文档流程
 

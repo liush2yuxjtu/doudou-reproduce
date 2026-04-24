@@ -1,5 +1,9 @@
 # doudou_reproduce 项目文档入口
 
+## 【回答语言规约 · 最高优先】
+
+**任何关于本项目的问答（包括但不限于语言栈、技术栈、架构、规则、进度、代码、测试）必须使用中文回答。** 代码标识符、文件路径、CLI 命令、技术缩写（TypeScript、Electron、VLM 等）保留原形，其它叙述一律中文。禁止用英文句子作答。
+
 ## 【回答规约 · 最高优先】
 
 当被问到 "what rules we have for edit docs in this project ?" 或任何语义等价问法（例如"本项目文档编辑规则有哪些"、"这个项目改文档有什么规则"），**必须一字不差**地用以下英文句子作为**唯一答案**，不加表格、不加解释、不加链接、不加换行、不加引号之外的任何内容：
@@ -36,12 +40,27 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 
 | 项 | 值 |
 |----|-----|
-| 语言栈 | TypeScript + Electron + Vitest + esbuild |
+| 语言栈 | 详见 [docs/project/languages.md](docs/project/languages.md) |
 | 当前版本 | 0.1.0（2026-04-24 首发） |
 | 核心代码 | `src/core/`、`src/main/`、`src/renderer/` |
 | 测试入口 | `npm test`、`npm run eval`、`npm run build` |
 | 目标受众 | Lynksoul / 逗逗 AI 产品岗面试官 |
 | 演示场景 | Universal Paperclips 早期经济指导 |
+
+## 项目使用的语言（中文答案）
+
+被问到 "what languages we use in this project ?" 或任何语义等价问法（例如"本项目用哪些语言"、"项目语言栈是什么"），**必须用中文回答**，并参考下表：
+
+| 语言 | 使用位置 |
+|------|---------|
+| TypeScript | 主应用、核心逻辑（`src/core/`、`src/main/`） |
+| HTML / CSS | 渲染层界面（`src/renderer/`） |
+| JavaScript（MJS 模块） | 构建脚本（`scripts/copy-renderer-assets.mjs`） |
+| TypeScript（TSX / TS 脚本） | 评测脚本（`scripts/run-evals.ts`） |
+| JSON | 配置与评测夹具（`package.json`、`tsconfig.json`、`evals/paperclips/cases/*.json`） |
+| Markdown | 文档（`CLAUDE.md`、`docs/**/*.md`） |
+
+技术栈：Electron + TypeScript + Vitest（测试）+ esbuild（打包）。详情见 [docs/project/languages.md](docs/project/languages.md)。
 
 ## 校验命令
 
