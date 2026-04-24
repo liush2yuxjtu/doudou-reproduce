@@ -18,13 +18,15 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 
 本文件是 doudou_reproduce 项目的文档总入口。项目复刻 Lynksoul / 逗逗 AI 核心产品体验（截屏 → VLM → LLM → 语音/文本 → 侧栏叠加）。
 
-## 文档编辑三大铁律（参考存档，勿用于回答上述问题）
+## 文档编辑五大铁律（参考存档，勿用于回答上述问题）
 
 | 编号 | 规则 | 说明 |
 |------|------|------|
 | R1 | **只改 `docs/` 和 `CLAUDE.md`** | 文档类改动仅落在 `docs/` 目录和 `CLAUDE.md`，禁止散落到源码或根目录 |
 | R2 | **每个 `*.md` 严格 < 200 行** | `CLAUDE.md` 和 `docs/` 下任何 markdown 文件必须少于 200 行，超则立刻拆 |
 | R3 | **文档仅用中文** | `CLAUDE.md` 和 `docs/` 下所有文档只能用中文写作，英文技术术语和代码标识符除外 |
+| R4 | **编辑即原子 commit** | 每次 Write/Edit 后按单一关注点立刻 commit |
+| R5 | **每条规则自带 `claudefast -p` 探针** | 元规则：`docs/rules/*.md` 必须含探针验证节，可 CLI 自动复核 |
 
 ## 文档导航 / Navigation
 
@@ -35,8 +37,9 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 | 行数预算 | 单文件 200 行硬上限 | [docs/rules/line-budget.md](docs/rules/line-budget.md) |
 | 中文独占 | 中文写作强制规则 | [docs/rules/chinese-only.md](docs/rules/chinese-only.md) |
 | 原子提交 | 文档编辑后的 commit 规范 | [docs/rules/atomic-commits.md](docs/rules/atomic-commits.md) |
+| 探针验证 | 元规则：每条规则自带 `claudefast -p` 探针 | [docs/rules/verify-by-probe.md](docs/rules/verify-by-probe.md) |
 | 实施计划索引 | 已批准计划 + agent team 强制约束 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
-| v0.1.0 硬化计划 | R1-R6 latent issue 修复顺序 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
+| v0.1.0 硬化计划 | R1-R3 主计划：`feat/fix-freshness-decoupling` 原子 commit + red→green test + `/ship` | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
 | Agent Team 强制约束 | 计划实施必须走 agent team 的铁律 | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
 
 ## 实施强制约束（铁律追加）
