@@ -17,6 +17,7 @@
 | `docs/rules/` | 文档编辑与项目协作的硬规则 |
 | `docs/project/` | 项目基本事实（语言栈、架构、版本等）|
 | `docs/plans/` | 已批准的实施计划（retro / investigate 产出）|
+| `docs/traps/` | 历史翻车模式归档（agent 协作陷阱等）|
 
 ## 规则清单
 
