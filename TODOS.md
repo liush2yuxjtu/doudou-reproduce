@@ -52,6 +52,18 @@
 
 ## Completed
 
+### QA / Test Verification Pass
+
+**What:** Verified all unit tests (19/19 pass), all evals (3/3 pass), build succeeds, and architecture integrity holds.
+
+**Evidence:** 
+- Unit tests: concurrency, scene-validator, vlm-boundary, policy-engine, vlm-parser, evidence-validator, openai-vision-client
+- Evals: early economy pricing, wire management, stable state detection
+- Build: TypeScript compilation + esbuild successful
+- Health score: 100/100
+
+**Completed:** 2026-04-24 (v0.1.0)
+
 ### Implement First Electron Paperclips Companion Slice
 
 **What:** Added Electron + TypeScript scaffold, selected-window capture, OpenAI vision scene parser boundary, scene validation, deterministic Paperclips policy, evidence blocking, sidecar UI, TTS controls, eval runner, and interview docs.
