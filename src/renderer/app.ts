@@ -4,8 +4,7 @@ import type {
   PaperclipsScene,
   TranscriptEntry
 } from '../shared/types.js';
-
-const MAX_SCENE_AGE_MS = 60_000;
+import { DEFAULT_MAX_SCENE_AGE_MS } from '../core/scene-validator.js';
 
 interface CompanionApi {
   listSources(): Promise<CaptureSourceSummary[]>;
@@ -149,7 +148,7 @@ function renderScene(scene: PaperclipsScene): void {
   confidence.textContent = `confidence: ${Math.round(scene.confidence * 100)}%`;
   sceneAge.textContent = `${Math.round(scene.ageMs / 1000)}s old`;
   freshness.textContent = scene.quality;
-  askLatest.disabled = scene.ageMs > MAX_SCENE_AGE_MS;
+  askLatest.disabled = scene.ageMs > DEFAULT_MAX_SCENE_AGE_MS;
 
   const rows = Object.entries(scene.fields).map(([key, field]) => {
     const value = field.value === null ? 'unknown' : `${field.value}${field.unit ? ` ${field.unit}` : ''}`;

@@ -38,10 +38,11 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 | 中文独占 | 中文写作强制规则 | [docs/rules/chinese-only.md](docs/rules/chinese-only.md) |
 | 原子提交 | 文档编辑后的 commit 规范 | [docs/rules/atomic-commits.md](docs/rules/atomic-commits.md) |
 | 探针验证 | 元规则：每条规则自带 `claudefast -p` 探针 | [docs/rules/verify-by-probe.md](docs/rules/verify-by-probe.md) |
-| 实施计划索引 | 已批准计划 + agent team 强制约束 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
-| v0.1.0 硬化计划 | R1-R3 已完成 2026-04-24（PR #1 merged `ad68649`）；R4-R9 延后 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
-| R4-R9 follow-up 清单 | 6 条延后 R-item 的占位总览，待单独立项 | [docs/plans/r4-r9-followups.md](docs/plans/r4-r9-followups.md) |
-| Agent Team 强制约束 | 计划实施必须走 agent team 的铁律 | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
+| 实施计划索引 | 已批准计划 + agent team 强制约束 + 6 个 R4-R9 子计划 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
+| v0.1.0 硬化计划 | R1-R3 已完成 2026-04-24（PR #1 merged `ad68649`）；R4-R9 已拆分 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
+| R4-R9 follow-up 总览 | 6 条 R-item 已全部拆成独立子计划（见 INDEX） | [docs/plans/r4-r9-followups.md](docs/plans/r4-r9-followups.md) |
+| R4-R9 /autoplan 审查 | 2026-04-24 Phase 1+3 双声音审查 + 用户 APPROVED 方案 C | [docs/plans/r4-r9-followups-autoplan-review.md](docs/plans/r4-r9-followups-autoplan-review.md) |
+| Agent Team 强制约束 | 计划实施必须走 agent team 的铁律（tier 化：≤3 文件 / test-only 允许单人） | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
 
 ## 实施强制约束（铁律追加）
 

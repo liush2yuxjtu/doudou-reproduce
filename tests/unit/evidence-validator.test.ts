@@ -74,7 +74,7 @@ describe('approveAdvice', () => {
     expect(result.issues).toContain('unsupported_field_fields.droneCount');
   });
 
-  it('blocks stale advice before TTS can speak it', () => {
+  it('都不超限 → issues 无 stale token', () => {
     const scene = validatedScene();
     const advice = buildDeterministicAdvice({
       scene,
@@ -82,16 +82,46 @@ describe('approveAdvice', () => {
       question: 'What should I do now?'
     });
 
+    // advice.createdAt ≈ now=2026-04-23T12:00:05Z → advice age=0s<10s，scene age=5s<30s
     const result = approveAdvice(advice, scene, {
-      now: new Date('2026-04-23T12:01:20.000Z')
+      now: new Date('2026-04-23T12:00:05.000Z')
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.issues).not.toContain('advice_stale');
+    expect(result.issues).not.toContain('approval_scene_stale');
+  });
+
+  it('advice + scene 都超限 → issues 同时含 advice_stale 和 approval_scene_stale', () => {
+    const scene = validatedScene();
+    // scene.capturedAt=2026-04-23T12:00:00Z，now=12:01:22Z → scene age=82s>30s
+    // advice.createdAt=2026-04-23T12:00:00Z，now=12:01:22Z → advice age=82s>10s
+    const advice: AdviceResponse = {
+      id: 'advice_both_stale',
+      sceneId: scene.id,
+      createdAt: new Date('2026-04-23T12:00:00.000Z').toISOString(),
+      actionId: 'lower_price',
+      title: 'Lower the price',
+      body: 'Demand is low; lowering price moves inventory.',
+      evidence: [{ field: 'fields.publicDemand', label: 'Demand', value: '9%' }],
+      usedFields: ['fields.publicDemand'],
+      confidence: 0.9,
+      ttsAllowed: true
+    };
+
+    const result = approveAdvice(advice, scene, {
+      now: new Date('2026-04-23T12:01:22.000Z')
     });
 
     expect(result.ok).toBe(false);
     expect(result.issues).toContain('advice_stale');
+    expect(result.issues).toContain('approval_scene_stale');
   });
 
-  it('blocks advice older than 10s even when scene is still fresh (R1 decoupling)', () => {
+  it('仅 advice 超限 → issues 只含 advice_stale，不含 approval_scene_stale', () => {
     const scene = validatedScene();
+    // scene.capturedAt=2026-04-23T12:00:00Z，now=12:00:15Z → scene age=15s<30s（新鲜）
+    // advice.createdAt=2026-04-23T12:00:00Z，now=12:00:15Z → advice age=15s>10s（过期）
     const advice: AdviceResponse = {
       id: 'advice_r1',
       sceneId: scene.id,
@@ -111,5 +141,32 @@ describe('approveAdvice', () => {
 
     expect(result.ok).toBe(false);
     expect(result.issues).toContain('advice_stale');
+    expect(result.issues).not.toContain('approval_scene_stale');
+  });
+
+  it('仅 scene 超限 → issues 只含 approval_scene_stale，不含 advice_stale', () => {
+    const scene = validatedScene();
+    // scene.capturedAt=2026-04-23T12:00:00Z，now=12:01:05Z → scene age=65s>30s（过期）
+    // advice.createdAt=2026-04-23T12:01:00Z，now=12:01:05Z → advice age=5s<10s（新鲜）
+    const advice: AdviceResponse = {
+      id: 'advice_scene_stale',
+      sceneId: scene.id,
+      createdAt: new Date('2026-04-23T12:01:00.000Z').toISOString(),
+      actionId: 'lower_price',
+      title: 'Lower the price',
+      body: 'Demand is low; lowering price moves inventory.',
+      evidence: [{ field: 'fields.publicDemand', label: 'Demand', value: '9%' }],
+      usedFields: ['fields.publicDemand'],
+      confidence: 0.9,
+      ttsAllowed: true
+    };
+
+    const result = approveAdvice(advice, scene, {
+      now: new Date('2026-04-23T12:01:05.000Z')
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContain('approval_scene_stale');
+    expect(result.issues).not.toContain('advice_stale');
   });
 });

@@ -23,8 +23,15 @@
 | 计划文件 | 主题 | 状态 |
 |---------|------|------|
 | [post-v0.1.0-hardening.md](post-v0.1.0-hardening.md) | R1-R3 主计划：`feat/fix-freshness-decoupling` branch，原子 commit + red→green test + `/ship` 收 PR | 已完成 2026-04-24（PR #1 merged `ad68649`） |
-| [agent-team-mandate.md](agent-team-mandate.md) | 实施必须走 agent team 的强制约束与模板 | 生效 |
-| [r4-r9-followups.md](r4-r9-followups.md) | v0.1.0 硬化后的 6 条 follow-up（R4-R9）占位与总览，待各自立项 | 清单待认领 |
+| [agent-team-mandate.md](agent-team-mandate.md) | 实施必须走 agent team 的强制约束与模板（tier 化：≤3 文件 / test-only 单 commit 允许单人） | 生效 |
+| [r4-r9-followups.md](r4-r9-followups.md) | R4-R9 roster 总览，子计划独立 | 已拆分 |
+| [r4-r9-followups-autoplan-review.md](r4-r9-followups-autoplan-review.md) | `/autoplan` 2026-04-24 对 roster 的完整审查报告（R2 豁免） | 已 APPROVED 方案 C |
+| [r4-constant-dedup.md](r4-constant-dedup.md) | R4 · `MAX_SCENE_AGE_MS` 3 处→1 处（含 renderer） | 待实施 |
+| [r5-codex-cli-stdin-regression.md](r5-codex-cli-stdin-regression.md) | R5 · Codex CLI 子进程 stdin-close 回归测试（重指 `openai-vision-client.ts`） | 待实施 |
+| [r6-freshresultgate-no-reset.md](r6-freshresultgate-no-reset.md) | R6 · `FreshResultGate` 显式无 reset 契约（仅 JSDoc + test） | 待实施 |
+| [r7-scene-stale-token-fix.md](r7-scene-stale-token-fix.md) | R7 · `evidence-validator.ts:31` bug fix：`approval_scene_stale` | 待实施 |
+| [r8-fixture-schema-split.md](r8-fixture-schema-split.md) | R8 · production schema 保持必填 + 独立 `EvalCaseRawScene` fixture schema | 待实施 |
+| [r9-framehash-decision.md](r9-framehash-decision.md) | R9 · `validation_fail` 写 hash 的产品决策 artifact（未决策） | 待决策 |
 
 ## 新增计划流程
 
