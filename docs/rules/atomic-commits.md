@@ -68,3 +68,36 @@ git commit -m "docs: fix broken link in docs/INDEX.md"
 ## 与全局规则的关系
 
 用户全局 `~/.claude/CLAUDE.md` 有 `atomic-commits-on-edit.md`：任何 Write/Edit 后立即原子 commit。本规则是其在文档领域的细化。
+
+## 探针验证（`claudefast -p`）
+
+### 合同
+
+| 项 | 值 |
+|----|-----|
+| 命令 | `claudefast -p "after editing a doc in this project, what should I do next ?"` |
+| 判定 | 输出是否指向"立即做原子 commit / git commit" |
+| 通过 | 答案含"commit / 提交"且语义为立即 / 原子 |
+| 失败 | 答案与 commit 无关 |
+
+### 标准探针集
+
+| 探针问题 | 期望答案语义 |
+|----------|-------------|
+| `after editing a doc in this project, what should I do next ?` | 立即做单一关注点原子 commit |
+| `本项目改完文档下一步做什么` | 原子 commit |
+
+### 判定脚本（macOS 兼容）
+
+```bash
+answer=$(claudefast -p "after editing a doc in this project, what should I do next ?" 2>&1)
+echo "$answer" | grep -qE '(commit|提交)' && echo PASS || echo FAIL
+```
+
+### 最近一次运行结果
+
+| 项 | 值 |
+|----|-----|
+| 探针 | `after editing a doc in this project, what should I do next ?` |
+| 运行时间 | 2026-04-24 |
+| 判定 | PASS |
