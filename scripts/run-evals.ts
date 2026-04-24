@@ -5,12 +5,12 @@ import { buildDeterministicAdvice } from '../src/core/advisor.js';
 import { approveAdvice } from '../src/core/evidence-validator.js';
 import { choosePaperclipsAction } from '../src/core/policy-engine.js';
 import { validatePaperclipsScene } from '../src/core/scene-validator.js';
-import type { RawPaperclipsScene } from '../src/shared/types.js';
+import type { EvalCaseRawScene, RawPaperclipsScene } from '../src/shared/types.js';
 
 interface EvalCase {
   name: string;
   expectedAction: string;
-  rawScene: RawPaperclipsScene;
+  rawScene: EvalCaseRawScene;
 }
 
 export interface EvalRunResult {
@@ -24,17 +24,51 @@ export interface RunEvalsOptions {
   now?: Date;
 }
 
+const defaultEvalDir = fileURLToPath(new URL('../evals/paperclips/cases', import.meta.url));
+
+function assertFixtureShape(file: string, raw: unknown): asserts raw is EvalCaseRawScene {
+  if (!raw || typeof raw !== 'object') {
+    throw new Error(`fixture ${file} rawScene 不是 object`);
+  }
+  const scene = raw as Record<string, unknown>;
+  if (typeof scene.isPaperclips !== 'boolean') {
+    throw new Error(`fixture ${file} 缺 isPaperclips`);
+  }
+  if (typeof scene.confidence !== 'number') {
+    throw new Error(`fixture ${file} 缺 confidence`);
+  }
+  if (!Array.isArray(scene.unknowns)) {
+    throw new Error(`fixture ${file} 缺 unknowns`);
+  }
+  if (!Array.isArray(scene.notes)) {
+    throw new Error(`fixture ${file} 缺 notes`);
+  }
+  if (!scene.fields || typeof scene.fields !== 'object') {
+    throw new Error(`fixture ${file} 缺 fields`);
+  }
+}
+
 export function runEvals(options: RunEvalsOptions = {}): EvalRunResult[] {
-  const evalDir = options.evalDir ?? 'evals/paperclips/cases';
+  const evalDir = options.evalDir ?? defaultEvalDir;
   const now = options.now ?? new Date();
   const files = readdirSync(evalDir).filter((file) => file.endsWith('.json')).sort();
   const results: EvalRunResult[] = [];
 
   for (const [index, file] of files.entries()) {
-    const fixture = JSON.parse(readFileSync(join(evalDir, file), 'utf8')) as EvalCase;
+    const parsed = JSON.parse(readFileSync(join(evalDir, file), 'utf8')) as {
+      name: string;
+      expectedAction: string;
+      rawScene: unknown;
+    };
+    assertFixtureShape(file, parsed.rawScene);
+    const fixture: EvalCase = {
+      name: parsed.name,
+      expectedAction: parsed.expectedAction,
+      rawScene: parsed.rawScene
+    };
     const rawScene: RawPaperclipsScene = {
       ...fixture.rawScene,
-      captureId: index + 1,
+      captureId: fixture.rawScene.captureId ?? index + 1,
       capturedAt: fixture.rawScene.capturedAt ?? now.toISOString()
     };
     const validated = validatePaperclipsScene(rawScene, { now });

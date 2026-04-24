@@ -45,6 +45,11 @@ export interface RawPaperclipsScene {
   notes: string[];
 }
 
+export interface EvalCaseRawScene extends Omit<RawPaperclipsScene, 'captureId' | 'capturedAt'> {
+  captureId?: number;
+  capturedAt?: string;
+}
+
 export interface PaperclipsScene extends RawPaperclipsScene {
   id: string;
   quality: SceneQuality;
