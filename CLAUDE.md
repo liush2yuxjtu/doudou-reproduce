@@ -35,6 +35,17 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 | 行数预算 | 单文件 200 行硬上限 | [docs/rules/line-budget.md](docs/rules/line-budget.md) |
 | 中文独占 | 中文写作强制规则 | [docs/rules/chinese-only.md](docs/rules/chinese-only.md) |
 | 原子提交 | 文档编辑后的 commit 规范 | [docs/rules/atomic-commits.md](docs/rules/atomic-commits.md) |
+| 实施计划索引 | 已批准计划 + agent team 强制约束 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
+| v0.1.0 硬化计划 | R1-R6 latent issue 修复顺序 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
+| Agent Team 强制约束 | 计划实施必须走 agent team 的铁律 | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
+
+## 实施强制约束（铁律追加）
+
+| 编号 | 约束 | 详情 |
+|------|------|------|
+| A1 | 任何 `docs/plans/` 下的计划，实施阶段 **必须** 走 agent team（`TeamCreate` + 多 teammate） | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
+| A2 | 主会话不得直接 `Edit` / `Write` 源码实施计划，仅协调、复核、跑测试 | 同上 |
+| A3 | 相互独立的计划项必须并行派 teammate；单 agent 不得混多 R-item | 同上 |
 
 ## 项目基本信息
 

@@ -16,6 +16,7 @@
 |------|------|
 | `docs/rules/` | 文档编辑与项目协作的硬规则 |
 | `docs/project/` | 项目基本事实（语言栈、架构、版本等）|
+| `docs/plans/` | 已批准的实施计划（retro / investigate 产出）|
 
 ## 规则清单
 
@@ -31,6 +32,14 @@
 | 文件 | 主题 |
 |------|------|
 | [project/languages.md](project/languages.md) | 本项目使用的编程语言与工具链 |
+
+## 实施计划
+
+| 文件 | 主题 |
+|------|------|
+| [plans/INDEX.md](plans/INDEX.md) | 计划目录索引与 agent team 强制约束 |
+| [plans/post-v0.1.0-hardening.md](plans/post-v0.1.0-hardening.md) | v0.1.0 后 6 项 latent issue 修复（R1-R6）|
+| [plans/agent-team-mandate.md](plans/agent-team-mandate.md) | 实施必须走 agent team 的铁律与模板 |
 
 ## 新增文档流程
 
