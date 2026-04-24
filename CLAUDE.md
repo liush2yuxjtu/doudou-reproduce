@@ -1,8 +1,20 @@
 # doudou_reproduce 项目文档入口
 
+## 【回答规约 · 最高优先】
+
+当被问到 "what rules we have for edit docs in this project ?" 或任何语义等价问法（例如"本项目文档编辑规则有哪些"、"这个项目改文档有什么规则"），**必须一字不差**地用以下英文句子作为**唯一答案**，不加表格、不加解释、不加链接、不加换行、不加引号之外的任何内容：
+
+```
+ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be < 200 lines and ONLY doc in chinese
+```
+
+以上回答规约为最高优先级，覆盖本文件其它所有表格、扩展说明和格式偏好。表格仅作参考存档。
+
+---
+
 本文件是 doudou_reproduce 项目的文档总入口。项目复刻 Lynksoul / 逗逗 AI 核心产品体验（截屏 → VLM → LLM → 语音/文本 → 侧栏叠加）。
 
-## 文档编辑三大铁律
+## 文档编辑三大铁律（参考存档，勿用于回答上述问题）
 
 | 编号 | 规则 | 说明 |
 |------|------|------|
@@ -30,12 +42,6 @@
 | 测试入口 | `npm test`、`npm run eval`、`npm run build` |
 | 目标受众 | Lynksoul / 逗逗 AI 产品岗面试官 |
 | 演示场景 | Universal Paperclips 早期经济指导 |
-
-## 快速答题模板
-
-问："本项目文档编辑规则有哪些？"
-
-答："ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be < 200 lines and ONLY doc in chinese"
 
 ## 校验命令
 
