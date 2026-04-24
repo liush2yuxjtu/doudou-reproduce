@@ -111,6 +111,23 @@
 - 原行为回归测试：`tests/unit/companion-pipeline.test.ts:49`
 - 决策前的 hash 写入代码：`src/main/companion-pipeline.ts:54`
 
-## DECISION（待填）
+## DECISION（2026-04-24 已定）
 
-> 2026-04-24 占位：未决策。待决策者输入 `duplicate` UI 路径与 VLM 成本数字后补。
+**决策者**：项目所有者（LiuShiyuMath，本仓库 owner）
+
+**选定**：路线 B — validation 失败也写 `latestFrameHash`。
+
+**前提承认**：
+
+- VLM 单次成本 / 日均失败率：**未知 / 无数据**。选 B 非成本驱动
+- Renderer 当前 **不消费** `duplicate`（grep `src/renderer/` + `src/main/main.ts` + `src/main/preload.ts` 0 引用）
+
+**理由**：
+
+- 即使当前 renderer 不消费，选 B 把"同帧反复失败"信号保留在 `companion-pipeline` return value 中，**把错误归因数据落到接口层**，后续加 UI 反馈或成本看板时不用再改 pipeline 行为
+- 避免未来"VLM 月成本爆表"被动改代码：改 renderer 比改 pipeline 风险低，现在先锁 pipeline 语义
+- 现有 R3 回归测试 `tests/unit/companion-pipeline.test.ts:49` 需要翻转（从 `duplicate===false` 改 `duplicate===true`），已在 r9-impl-b plan 计入
+
+**实施 plan**：见 [r9-impl-b.md](r9-impl-b.md)
+
+**非决策项**：renderer UI 反馈（"同帧反复失败"提示文案 / 引导换窗口）留到 implementation plan 之后的 UX 迭代，非本 R9 范围。

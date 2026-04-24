@@ -31,7 +31,8 @@
 | [r6-freshresultgate-no-reset.md](r6-freshresultgate-no-reset.md) | R6 · `FreshResultGate` 显式无 reset 契约（仅 JSDoc + test） | 待实施 |
 | [r7-scene-stale-token-fix.md](r7-scene-stale-token-fix.md) | R7 · `evidence-validator.ts:31` bug fix：`approval_scene_stale` | 待实施 |
 | [r8-fixture-schema-split.md](r8-fixture-schema-split.md) | R8 · production schema 保持必填 + 独立 `EvalCaseRawScene` fixture schema | 待实施 |
-| [r9-framehash-decision.md](r9-framehash-decision.md) | R9 · `validation_fail` 写 hash 的产品决策 artifact（未决策） | 待决策 |
+| [r9-framehash-decision.md](r9-framehash-decision.md) | R9 · `validation_fail` 写 hash 的产品决策 artifact | 已决策 2026-04-24（选路线 B） |
+| [r9-impl-b.md](r9-impl-b.md) | R9-B · 路线 B 实施（pipeline 失败路径写 hash + R3 test 翻转） | 待实施 |
 
 ## 新增计划流程
 
