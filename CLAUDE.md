@@ -40,6 +40,7 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 | 探针验证 | 元规则：每条规则自带 `claudefast -p` 探针 | [docs/rules/verify-by-probe.md](docs/rules/verify-by-probe.md) |
 | 实施计划索引 | 已批准计划 + agent team 强制约束 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
 | v0.1.0 硬化计划 | R1-R3 已完成 2026-04-24（PR #1 merged `ad68649`）；R4-R9 延后 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
+| R4-R9 follow-up 清单 | 6 条延后 R-item 的占位总览，待单独立项 | [docs/plans/r4-r9-followups.md](docs/plans/r4-r9-followups.md) |
 | Agent Team 强制约束 | 计划实施必须走 agent team 的铁律 | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
 
 ## 实施强制约束（铁律追加）

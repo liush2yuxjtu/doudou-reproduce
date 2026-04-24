@@ -24,6 +24,7 @@
 |---------|------|------|
 | [post-v0.1.0-hardening.md](post-v0.1.0-hardening.md) | R1-R3 主计划：`feat/fix-freshness-decoupling` branch，原子 commit + red→green test + `/ship` 收 PR | 已完成 2026-04-24（PR #1 merged `ad68649`） |
 | [agent-team-mandate.md](agent-team-mandate.md) | 实施必须走 agent team 的强制约束与模板 | 生效 |
+| [r4-r9-followups.md](r4-r9-followups.md) | v0.1.0 硬化后的 6 条 follow-up（R4-R9）占位与总览，待各自立项 | 清单待认领 |
 
 ## 新增计划流程
 
