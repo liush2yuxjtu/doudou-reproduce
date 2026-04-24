@@ -5,6 +5,7 @@ import { CaptureService } from './capture-service.js';
 import { CompanionPipeline } from './companion-pipeline.js';
 import { loadLocalEnv } from './env.js';
 import { OpenAiVisionClient } from './openai-vision-client.js';
+import { safeInvoke } from './ipc-envelope.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -45,15 +46,6 @@ function registerIpc(): void {
     safeInvoke(() => pipeline.ask(input.question, input.fresh))
   );
   ipcMain.handle('companion:proactive', () => safeInvoke(() => pipeline.proactive()));
-}
-
-async function safeInvoke<T>(fn: () => Promise<T>): Promise<{ ok: true; data: T } | { ok: false; error: string }> {
-  try {
-    return { ok: true, data: await fn() };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return { ok: false, error: message };
-  }
 }
 
 registerIpc();
