@@ -3,7 +3,6 @@
   "expectedAction": "buy_wire",
   "rawScene": {
     "captureId": 2,
-    "capturedAt": "2026-04-23T12:00:00.000Z",
     "isPaperclips": true,
     "confidence": 0.91,
     "fields": {

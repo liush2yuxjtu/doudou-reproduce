@@ -38,7 +38,6 @@ export class CompanionPipeline {
     const captureId = this.gate.beginCapture();
     const frame = await this.captureService.captureFrame(captureId);
     const duplicate = frame.hash === this.latestFrameHash;
-    this.latestFrameHash = frame.hash;
 
     const raw = await this.visionClient.extractScene(frame);
     const validated = validatePaperclipsScene(raw, { now: new Date() });
@@ -52,6 +51,7 @@ export class CompanionPipeline {
     }
 
     this.memory.recordScene(validated.scene);
+    this.latestFrameHash = frame.hash;
     return { frame, scene: validated.scene, duplicate };
   }
 

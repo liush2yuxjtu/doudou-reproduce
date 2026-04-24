@@ -89,4 +89,27 @@ describe('approveAdvice', () => {
     expect(result.ok).toBe(false);
     expect(result.issues).toContain('advice_stale');
   });
+
+  it('blocks advice older than 10s even when scene is still fresh (R1 decoupling)', () => {
+    const scene = validatedScene();
+    const advice: AdviceResponse = {
+      id: 'advice_r1',
+      sceneId: scene.id,
+      createdAt: new Date('2026-04-23T12:00:00.000Z').toISOString(),
+      actionId: 'lower_price',
+      title: 'Lower the price',
+      body: 'Demand is low; lowering price moves inventory.',
+      evidence: [{ field: 'fields.publicDemand', label: 'Demand', value: '9%' }],
+      usedFields: ['fields.publicDemand'],
+      confidence: 0.9,
+      ttsAllowed: true
+    };
+
+    const result = approveAdvice(advice, scene, {
+      now: new Date('2026-04-23T12:00:15.000Z')
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContain('advice_stale');
+  });
 });
