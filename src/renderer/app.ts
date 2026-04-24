@@ -29,7 +29,7 @@ interface AskResult {
   transcript: TranscriptEntry[];
 }
 
-type IpcResult<T> = { ok: true; data: T } | { ok: false; error: string };
+type IpcResult<T> = { ok: true; data: T } | { ok: false; error: string; duplicate?: boolean };
 
 declare global {
   interface Window {
@@ -101,7 +101,11 @@ async function ask(fresh: boolean): Promise<void> {
   setBusy(fresh ? 'Capturing...' : 'Thinking...');
   const result = await window.companionApi.ask(question.value, fresh);
   if (!result.ok) {
-    renderError(result.error);
+    if (result.duplicate === true) {
+      renderDuplicateHint(result.error);
+    } else {
+      renderError(result.error);
+    }
     return;
   }
 
@@ -177,6 +181,13 @@ function renderError(error: string): void {
   freshness.textContent = 'error';
   adviceTitle.textContent = 'Recovery needed';
   adviceBody.innerHTML = `<span class="error">${escapeHtml(error)}</span>`;
+}
+
+function renderDuplicateHint(errMsg: string): void {
+  statusTitle.textContent = 'Needs attention';
+  freshness.textContent = 'error';
+  adviceTitle.textContent = 'Recovery needed';
+  adviceBody.innerHTML = `<p>${escapeHtml(errMsg)}</p><p class="ux-hint">同一画面反复失败，建议切换窗口或调整场景后重试。</p>`;
 }
 
 function speak(text: string): void {
