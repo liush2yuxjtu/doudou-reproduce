@@ -28,7 +28,7 @@ export function approveAdvice(
 
   const sceneAgeMs = now.getTime() - Date.parse(scene.capturedAt);
   if (!Number.isFinite(sceneAgeMs) || sceneAgeMs > DEFAULT_MAX_SCENE_AGE_MS) {
-    issues.push('advice_stale');
+    issues.push('approval_scene_stale');
   }
 
   for (const fieldPath of advice.usedFields) {
