@@ -19,4 +19,24 @@ describe('FreshResultGate', () => {
     expect(gate.canCommitAdvice('scene_old')).toBe(false);
     expect(gate.canCommitAdvice('scene_current')).toBe(true);
   });
+
+  it('invalidates earlier captureIds as soon as a newer beginCapture fires (no reset needed)', () => {
+    const gate = new FreshResultGate();
+    const first = gate.beginCapture();
+    gate.beginCapture();
+
+    expect(gate.canCommitCapture(first)).toBe(false);
+    expect(gate.commitScene(first, 'scene_from_stale_capture')).toBe(false);
+    expect(gate.canCommitAdvice('scene_from_stale_capture')).toBe(false);
+  });
+
+  it('does not rewrite currentSceneId when beginCapture fires after a successful commit', () => {
+    const gate = new FreshResultGate();
+    const commitCapture = gate.beginCapture();
+    gate.commitScene(commitCapture, 'scene_locked');
+
+    gate.beginCapture();
+
+    expect(gate.canCommitAdvice('scene_locked')).toBe(true);
+  });
 });
