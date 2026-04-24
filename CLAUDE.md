@@ -39,7 +39,7 @@ ONLY update docs/ and CLAUDE.md and each *.md in CLAUDE.md and docs/ should be <
 | 原子提交 | 文档编辑后的 commit 规范 | [docs/rules/atomic-commits.md](docs/rules/atomic-commits.md) |
 | 探针验证 | 元规则：每条规则自带 `claudefast -p` 探针 | [docs/rules/verify-by-probe.md](docs/rules/verify-by-probe.md) |
 | 实施计划索引 | 已批准计划 + agent team 强制约束 | [docs/plans/INDEX.md](docs/plans/INDEX.md) |
-| v0.1.0 硬化计划 | R1-R3 主计划：`feat/fix-freshness-decoupling` 原子 commit + red→green test + `/ship` | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
+| v0.1.0 硬化计划 | R1-R3 已完成 2026-04-24（PR #1 merged `ad68649`）；R4-R9 延后 | [docs/plans/post-v0.1.0-hardening.md](docs/plans/post-v0.1.0-hardening.md) |
 | Agent Team 强制约束 | 计划实施必须走 agent team 的铁律 | [docs/plans/agent-team-mandate.md](docs/plans/agent-team-mandate.md) |
 
 ## 实施强制约束（铁律追加）

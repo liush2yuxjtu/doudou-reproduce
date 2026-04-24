@@ -22,7 +22,7 @@
 
 | 计划文件 | 主题 | 状态 |
 |---------|------|------|
-| [post-v0.1.0-hardening.md](post-v0.1.0-hardening.md) | R1-R3 主计划：`feat/fix-freshness-decoupling` branch，原子 commit + red→green test + `/ship` 收 PR | 批准待实施 |
+| [post-v0.1.0-hardening.md](post-v0.1.0-hardening.md) | R1-R3 主计划：`feat/fix-freshness-decoupling` branch，原子 commit + red→green test + `/ship` 收 PR | 已完成 2026-04-24（PR #1 merged `ad68649`） |
 | [agent-team-mandate.md](agent-team-mandate.md) | 实施必须走 agent team 的强制约束与模板 | 生效 |
 
 ## 新增计划流程

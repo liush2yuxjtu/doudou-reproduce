@@ -70,15 +70,26 @@
 - `/ship` 生成 PR，description 链回本文件与 `.context/retros/2026-04-24-1.json`
 - PR merge 后删 branch
 
+## 实施结果
+
+- **状态：** 已完成（2026-04-24）
+- **PR：** [#1](https://github.com/liush2yuxjtu/doudou-reproduce/pull/1) merged as `ad68649`
+- **三 commit：** `0d0672f fix(R1)`、`e22a683 fix(R2)`、`88d2220 fix(R3)`
+- **测试：** `npm test` 23/23 绿；`npm run build` 通过；`npm run eval` 4/4（含新 `stale-scene.json` 走 `validation_fail`）
+- **外部 review：** gemini-code-assist 留 informational 建议（error code 区分、`isMain` 跨平台）；主会话 adversarial subagent 另发现 R3 边界副作用（`validation_fail` 场景哈希不写入 → 同帧重试）
+
 ## 延后项（非主计划）
 
-R4-R6 不在本 branch 处理，延后为独立计划：
+R4-R9 不在本 branch 处理，各自独立计划：
 
 | ID | 主题 | 延后原因 |
 |----|------|---------|
-| R4 | `MAX_SCENE_AGE_MS` 常量漂移 | 清理类，先看 R1/R2 是否顺带解决 |
-| R5 | ISSUE-001 / stdin-close 回归测试 | R1/R2 已覆盖 staleness，其余两项另起计划 |
-| R6 | `FreshResultGate` reset | 契约优化，等 R3 落地后再评估必要性 |
+| R4 | `MAX_SCENE_AGE_MS` 常量漂移 | 清理类 |
+| R5 | ISSUE-001 / stdin-close 回归测试 | R1/R2 已覆盖 staleness 主路径 |
+| R6 | `FreshResultGate` reset 契约 | 等 R3 落地后评估必要性 |
+| R7 | `approveAdvice` 拆 `advice_stale` token 为 `advice_stale` + `scene_stale` | gemini + adversarial 共识，可观测性改进 |
+| R8 | `RawPaperclipsScene.capturedAt` 类型契约硬化 + `runEvals` 绝对 evalDir | R2 引入的类型松动 |
+| R9 | `companion-pipeline` 在 `validated.ok=false` 场景是否写入 `latestFrameHash` | R3 引入的重试成本行为，需产品侧决策 |
 
 ## 超时与回滚
 
