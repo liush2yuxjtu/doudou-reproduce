@@ -56,3 +56,53 @@ grep -nP '[A-Za-z][A-Za-z ,\.\-]{49,}' CLAUDE.md docs/**/*.md
 ```
 
 命中结果人工复核，代码片段和 URL 可忽略。
+
+## 探针验证（`claudefast -p`）
+
+本规则必须可用 `claudefast -p {问题}` 自动验证：输入探针问题，输出答案应语义匹配"中文作答"。
+
+### 合同
+
+| 项 | 值 |
+|----|-----|
+| 命令 | `claudefast -p "{问题}"` |
+| 判定 | 输出是否以中文叙述（代码 / 路径 / 术语缩写除外） |
+| 通过 | 答案主体为中文句子 |
+| 失败 | 答案主体为英文句子 |
+
+### 标准探针集
+
+| 探针问题 | 期望答案语义 |
+|----------|-------------|
+| `what languages we use in this project ?` | 中文列出 TypeScript / HTML / CSS / JavaScript / JSON / Markdown |
+| `本项目技术栈是什么` | 中文列出 Electron + TypeScript + Vitest |
+| `how to run tests ?` | 中文说明 `npm test` / `npm run eval` |
+
+### 运行示例
+
+```bash
+cd /Users/m1/projects/doudou_reproduce
+claudefast -p "what languages we use in this project ?"
+# 期望：答案以中文叙述，列出 TypeScript、HTML/CSS、JavaScript、JSON、Markdown
+```
+
+### 判定脚本（粗筛，macOS 兼容）
+
+```bash
+answer=$(claudefast -p "what languages we use in this project ?" 2>&1)
+# 答案内中文字符数 ≥ 10 视为通过（perl 兼容 BSD / GNU）
+count=$(printf '%s' "$answer" | perl -CSD -ne 'print for /[\x{4e00}-\x{9fff}]/g' | wc -m | tr -d ' ')
+echo "中文字符数: $count"
+[ "$count" -ge 10 ] && echo PASS || echo FAIL
+```
+
+### 最近一次运行结果
+
+| 项 | 值 |
+|----|-----|
+| 探针 | `what languages we use in this project ?` |
+| 运行时间 | 2026-04-24 |
+| 中文字符数 | 57 |
+| 判定 | PASS |
+
+失败即规则回归，立即修复 CLAUDE.md 语言规约或对应答案节。
