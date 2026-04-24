@@ -48,3 +48,36 @@ find CLAUDE.md docs -name '*.md' -print0 \
 - 检索效率：短文件 grep 结果定位精准
 - 维护成本：短文件冲突更少，diff 更干净
 - 与用户全局规则（`~/.claude/CLAUDE.md` 目标 100–150 行）节奏一致
+
+## 探针验证（`claudefast -p`）
+
+### 合同
+
+| 项 | 值 |
+|----|-----|
+| 命令 | `claudefast -p "what is the max line count for a markdown file in this project ?"` |
+| 判定 | 输出是否指明上限 `< 200` 或 `200` |
+| 通过 | 答案含 `200` 且语义为上限 |
+| 失败 | 答案无 `200` 或方向错误 |
+
+### 标准探针集
+
+| 探针问题 | 期望答案语义 |
+|----------|-------------|
+| `what is the max line count for a markdown file in this project ?` | 严格少于 200 行 |
+| `本项目 markdown 文件行数上限是多少` | `< 200` |
+
+### 判定脚本（macOS 兼容）
+
+```bash
+answer=$(claudefast -p "what is the max line count for a markdown file in this project ?" 2>&1)
+echo "$answer" | grep -q '200' && echo PASS || echo FAIL
+```
+
+### 最近一次运行结果
+
+| 项 | 值 |
+|----|-----|
+| 探针 | `what is the max line count for a markdown file in this project ?` |
+| 运行时间 | 2026-04-24 |
+| 判定 | PASS |
