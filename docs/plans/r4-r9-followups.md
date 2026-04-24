@@ -1,5 +1,9 @@
 # R4-R9 后续 follow-up 清单
 
+<!-- /autoplan restore: ~/.gstack/projects/doudou_reproduce/main-autoplan-restore-20260424-120228.md -->
+<!-- /autoplan review 2026-04-24 APPROVED 方案 C: docs/plans/r4-r9-followups-autoplan-review.md -->
+<!-- Gate 决定: R9 降中 / R5 重指 openai-vision-client / A1-A3 tier 化 / R4 扩 renderer。具体待 commit 落地。 -->
+
 本文件收拢 `post-v0.1.0-hardening.md` 之后的 6 条延后项，作为独立计划的占位与总览。每条 R-item 正式动工时，再按需拆单独 `{r-id}-{topic}.md`。
 
 ## 来源
