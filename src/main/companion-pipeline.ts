@@ -34,20 +34,33 @@ export class CompanionPipeline {
     };
   }
 
+  getLatestFrameHash(): string | null {
+    return this.latestFrameHash;
+  }
+
   async captureScene(): Promise<{ frame: CaptureFrame; scene: PaperclipsScene; duplicate: boolean }> {
     const captureId = this.gate.beginCapture();
     const frame = await this.captureService.captureFrame(captureId);
     const duplicate = frame.hash === this.latestFrameHash;
 
-    const raw = await this.visionClient.extractScene(frame);
+    let raw: import('../shared/types.js').RawPaperclipsScene;
+    try {
+      raw = await this.visionClient.extractScene(frame);
+    } catch (err) {
+      this.latestFrameHash = frame.hash;
+      throw err;
+    }
+
     const validated = validatePaperclipsScene(raw, { now: new Date() });
 
     if (!validated.scene || !validated.ok) {
-      throw new Error(`SceneValidationFailed: ${validated.issues.join(', ')}`);
+      this.latestFrameHash = frame.hash;
+      throw Object.assign(new Error(`SceneValidationFailed: ${validated.issues.join(', ')}`), { duplicate });
     }
 
     if (!this.gate.commitScene(captureId, validated.scene.id)) {
-      throw new Error('StaleCaptureIgnored');
+      this.latestFrameHash = frame.hash;
+      throw Object.assign(new Error('StaleCaptureIgnored'), { duplicate });
     }
 
     this.memory.recordScene(validated.scene);

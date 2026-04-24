@@ -5,8 +5,9 @@ import type { OpenAiVisionClient } from '../../src/main/openai-vision-client.js'
 import type { CaptureFrame, RawPaperclipsScene } from '../../src/shared/types.js';
 
 const FIXED_HASH = 'sha256-test-frame-hash';
+const ALT_HASH = 'sha256-different-frame-hash';
 
-const buildFrame = (captureId: number, capturedAt: string): CaptureFrame => ({
+const buildFrame = (captureId: number, capturedAt: string, hash = FIXED_HASH): CaptureFrame => ({
   captureId,
   sourceId: 'window:test',
   sourceName: 'Universal Paperclips',
@@ -14,7 +15,7 @@ const buildFrame = (captureId: number, capturedAt: string): CaptureFrame => ({
   mimeType: 'image/png',
   base64: 'AAAA',
   dataUrl: 'data:image/png;base64,AAAA',
-  hash: FIXED_HASH,
+  hash,
   width: 1600,
   height: 1000
 });
@@ -46,7 +47,7 @@ describe('CompanionPipeline.captureScene frame hash ordering', () => {
     vi.setSystemTime(new Date('2026-04-23T12:00:04.000Z'));
   });
 
-  it('does not mark next capture duplicate after VLM throws on the prior identical frame', async () => {
+  it('marks next capture as duplicate after VLM throws on the prior identical frame (R9-B)', async () => {
     const captureService = {
       captureFrame: vi.fn(async (captureId: number) =>
         buildFrame(captureId, '2026-04-23T12:00:03.500Z'))
@@ -64,7 +65,77 @@ describe('CompanionPipeline.captureScene frame hash ordering', () => {
     await expect(pipeline.captureScene()).rejects.toThrow('VlmProviderError 503');
 
     const second = await pipeline.captureScene();
-    expect(second.duplicate).toBe(false);
+    expect(second.duplicate).toBe(true);
     expect(second.frame.hash).toBe(FIXED_HASH);
+  });
+
+  it('writes latestFrameHash after VLM throw (回归 A)', async () => {
+    const captureService = {
+      captureFrame: vi.fn(async (captureId: number) =>
+        buildFrame(captureId, '2026-04-23T12:00:03.500Z'))
+    } as unknown as CaptureService;
+
+    const visionClient = {
+      extractScene: vi
+        .fn<OpenAiVisionClient['extractScene']>()
+        .mockRejectedValueOnce(new Error('VlmProviderError 503'))
+    } as unknown as OpenAiVisionClient;
+
+    const pipeline = new CompanionPipeline(captureService, visionClient);
+
+    await expect(pipeline.captureScene()).rejects.toThrow('VlmProviderError 503');
+
+    expect(pipeline.getLatestFrameHash()).toBe(FIXED_HASH);
+  });
+
+  it('writes latestFrameHash after validation throw (回归 B)', async () => {
+    const captureService = {
+      captureFrame: vi.fn(async (captureId: number) =>
+        buildFrame(captureId, '2026-04-23T12:00:03.500Z'))
+    } as unknown as CaptureService;
+
+    const visionClient = {
+      extractScene: vi.fn(async (frame: CaptureFrame) => ({
+        captureId: frame.captureId,
+        capturedAt: frame.capturedAt,
+        isPaperclips: false,
+        confidence: 0.1,
+        fields: {},
+        unknowns: [],
+        notes: []
+      }))
+    } as unknown as OpenAiVisionClient;
+
+    const pipeline = new CompanionPipeline(captureService, visionClient);
+
+    await expect(pipeline.captureScene()).rejects.toThrow('SceneValidationFailed');
+
+    expect(pipeline.getLatestFrameHash()).toBe(FIXED_HASH);
+  });
+
+  it('does not mark duplicate when different frame after VLM failure (回归 C)', async () => {
+    let callCount = 0;
+    const captureService = {
+      captureFrame: vi.fn(async (captureId: number) => {
+        callCount++;
+        const hash = callCount === 1 ? FIXED_HASH : ALT_HASH;
+        return buildFrame(captureId, '2026-04-23T12:00:03.500Z', hash);
+      })
+    } as unknown as CaptureService;
+
+    const visionClient = {
+      extractScene: vi
+        .fn<OpenAiVisionClient['extractScene']>()
+        .mockRejectedValueOnce(new Error('VlmProviderError 503'))
+        .mockImplementationOnce(async (frame: CaptureFrame) => buildRawScene(frame.captureId, frame.capturedAt))
+    } as unknown as OpenAiVisionClient;
+
+    const pipeline = new CompanionPipeline(captureService, visionClient);
+
+    await expect(pipeline.captureScene()).rejects.toThrow('VlmProviderError 503');
+
+    const second = await pipeline.captureScene();
+    expect(second.duplicate).toBe(false);
+    expect(second.frame.hash).toBe(ALT_HASH);
   });
 });
